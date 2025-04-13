@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados Torneo Free Fire</title>
     <link rel="stylesheet" href="style-results.css">
+    <style>
+        .fade-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #top6-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+            align-items: center;
+            max-width: 900px;
+            margin: auto;
+        }
+        
+        .team-card {
+            width: 270px;
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
     <table id="results-table">
