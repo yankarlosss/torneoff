@@ -29,6 +29,49 @@
         .team-card {
             width: 270px;
             padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .team-rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .team-logo {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        
+        .team-info {
+            margin-top: 10px;
+        }
+        
+        .team-stats {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .player-flags {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .player {
+            margin: 5px 0;
+        }
+        
+        .flag {
+            width: 20px;
+            height: auto;
+            margin-right: 5px;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -38,7 +81,26 @@
     
     <audio id="top1-sound" src="./top1-sound.mp3"></audio>
     
-    <script>
+    <script type="module">
+        // Importa las funciones necesarias desde Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoqAGJaDgotg4Ov2TNOEz-JuKuoLqzjWM",
+            authDomain: "torneo-crack-cup.firebaseapp.com",
+            projectId: "torneo-crack-cup",
+            storageBucket: "torneo-crack-cup.appspot.com",
+            messagingSenderId: "1245957614",
+            appId: "1:1245957614:web:42ec92c7df010052a852ff",
+            measurementId: "G-QPL8KEKWKD"
+        };
+
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
         let lastTop1 = null;
         let audioUnlocked = false;
 
@@ -73,12 +135,13 @@
         }
         
         function updateTop6() {
-            const rawData = localStorage.getItem('teams');
-            if (!rawData) return;
-
-            try {
-                const teams = JSON.parse(rawData);
-                if (!Array.isArray(teams)) return;
+            onValue(ref(database, 'teams'), (snapshot) => {
+                const teams = [];
+                snapshot.forEach((childSnapshot) => {
+                    const teamData = childSnapshot.val();
+                    const teamKey = childSnapshot.key;
+                    teams.push({ key: teamKey, ...teamData });
+                });
 
                 const sortedTeams = teams.sort((a, b) => (b.points || 0) - (a.points || 0)).slice(0, 6);
 
@@ -116,22 +179,13 @@
                         container.appendChild(teamDiv);
                     });
                 }
-
-            } catch (error) {
-                console.error("Error procesando los datos:", error);
-            }
+            });
         }
 
         // Desbloquear el audio con un clic del usuario
         document.addEventListener("click", unlockAudio);
 
-        // Escuchar cambios en localStorage
-        window.addEventListener("storage", function(event) {
-            if (event.key === "teams") {
-                updateTop6();
-            }
-        });
-
+        // Cargar los resultados cuando el DOM esté listo
         document.addEventListener("DOMContentLoaded", updateTop6);
     </script>
 </body>
