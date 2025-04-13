@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados Torneo Free Fire</title>
-    <link rel="stylesheet" href="style-results.css">
+    <title>Top 12 Equipos - Torneo Free Fire</title>
+    <link rel="stylesheet" href="style-top6.css">
     <style>
         .fade-in {
             animation: slideIn 0.3s ease-out;
         }
-        
+
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         #top6-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr); /* Ahora 4 por fila */
             gap: 20px;
             padding: 20px;
             justify-content: center;
             align-items: center;
-            max-width: 900px;
+            max-width: 1200px; /* Aumentado para acomodar 4 columnas */
             margin: auto;
         }
-        
+
         .team-card {
             width: 270px;
             padding: 15px;
@@ -33,27 +33,15 @@
     </style>
 </head>
 <body>
-    <table id="results-table">
-        <thead>
-            <tr>
-                <th>Posición</th>
-                <th>Logo</th>
-                <th>Equipo</th>
-                <th>Kills</th>
-                <th>Puntos</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Resultados se cargarán aquí -->
-        </tbody>
-    </table>
+    <h1>🔥 Top 12 Equipos del Torneo 🔥</h1>
+    <div id="top6-container"></div>
+
+    <audio id="top1-sound" src="./top1-sound.mp3"></audio>
 
     <script type="module">
-        // ✅ 1. Importa lo necesario de Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-        // ✅ 2. Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDoqAGJaDgotg4Ov2TNOEz-JuKuoLqzjWM",
             authDomain: "torneo-crack-cup.firebaseapp.com",
@@ -64,12 +52,48 @@
             measurementId: "G-QPL8KEKWKD"
         };
 
-        // ✅ 3. Inicializa Firebase aquí, de forma global
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // ✅ 4. Función para actualizar los resultados
-        function updateResults() {
+        let lastTop1 = null;
+        let audioUnlocked = false;
+
+        function unlockAudio() {
+            const audio = document.getElementById('top1-sound');
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audioUnlocked = true;
+                console.log("🔊 Audio desbloqueado");
+            }).catch(err => console.warn("🔇 No se pudo desbloquear el audio:", err));
+            document.removeEventListener("click", unlockAudio);
+        }
+
+        function playSound() {
+            if (!audioUnlocked) return;
+            const audio = document.getElementById('top1-sound');
+            audio.currentTime = 0;
+            audio.play().catch(err => console.warn("Error reproduciendo el sonido:", err));
+        }
+
+        function preloadImages(teams) {
+            teams.forEach(team => {
+                const img = new Image();
+                img.src = team.logo;
+            });
+        }
+
+        function getRankText(index) {
+            const rankNames = [
+                "🏆 Puesto 1", "🥈 Puesto 2", "🥉 Puesto 3", 
+                "Puesto 4", "Puesto 5", "Puesto 6", 
+                "Puesto 7", "Puesto 8", "Puesto 9", 
+                "Puesto 10", "Puesto 11", "Puesto 12"
+            ];
+            return rankNames[index] || `Puesto ${index + 1}`;
+        }
+
+        function updateTop6() {
             onValue(ref(database, 'teams'), (snapshot) => {
                 const teams = [];
                 snapshot.forEach((childSnapshot) => {
@@ -78,40 +102,45 @@
                     teams.push({ key: teamKey, ...teamData });
                 });
 
-                const sortedTeams = teams.sort((a, b) => (b.points || 0) - (a.points || 0));
-                const tbody = document.querySelector('#results-table tbody');
+                const sortedTeams = teams.sort((a, b) => (b.points || 0) - (a.points || 0)).slice(0, 12); // Ahora muestra 12
 
-                const previousOrder = [...tbody.children].map(row => row.dataset.teamName);
-                
-                tbody.innerHTML = '';
+                if (sortedTeams.length > 0 && sortedTeams[0].name !== lastTop1) {
+                    playSound();
+                    lastTop1 = sortedTeams[0].name;
 
-                sortedTeams.forEach((team, index) => {
-                    const row = document.createElement('tr');
-                    row.dataset.teamName = team.name; // Guardar nombre del equipo en dataset
+                    preloadImages(sortedTeams);
+                    const container = document.getElementById('top6-container');
+                    container.innerHTML = '';
 
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td><img src="${team.logo}" alt="${team.name} Logo" class="team-logo"></td>
-                        <td>${team.name}</td>
-                        <td>${team.kills || 0}</td>
-                        <td>${team.points || 0}</td>
-                    `;
+                    sortedTeams.forEach((team, index) => {
+                        const teamDiv = document.createElement('div');
+                        teamDiv.classList.add('team-card', 'fade-in');
 
-                    // Si la posición cambió, añadir la animación
-                    if (previousOrder.includes(team.name) && previousOrder.indexOf(team.name) !== index) {
-                        row.classList.add('changed');
-                        setTimeout(() => row.classList.remove('changed'), 1000); // Remover clase después de 1 seg
-                    }
-
-                    tbody.appendChild(row);
-                });
+                        teamDiv.innerHTML = `
+                            <div class="team-rank">${getRankText(index)}</div>
+                            <img src="${team.logo}" alt="${team.name} Logo" class="team-logo">
+                            <div class="team-info">
+                                <h2>${team.name}</h2>
+                                <div class="team-stats">
+                                    <span>Kills: ${team.kills || 0}</span> | 
+                                    <span>Puntos: ${team.points || 0}</span>
+                                </div>
+                                <div class="player-flags">
+                                    ${team.players ? team.players.map(player => 
+                                        `<span class="player">
+                                            <img src="flags/${player.country}.png" class="flag"> ${player.name}
+                                        </span>`).join('') : ''}
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(teamDiv);
+                    });
+                }
             });
         }
 
-        // ✅ 5. Cargar los resultados cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', () => {
-            updateResults();
-        });
+        document.addEventListener("click", unlockAudio);
+        document.addEventListener("DOMContentLoaded", updateTop6);
     </script>
 </body>
 </html>
