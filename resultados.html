@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="style-results.css">
 </head>
 <body>
-
-
     <table id="results-table">
         <thead>
             <tr>
@@ -24,64 +22,70 @@
         </tbody>
     </table>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            updateResults();
-        });
+    <script type="module">
+        // ✅ 1. Importa lo necesario de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
+        // ✅ 2. Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoqAGJaDgotg4Ov2TNOEz-JuKuoLqzjWM",
+            authDomain: "torneo-crack-cup.firebaseapp.com",
+            projectId: "torneo-crack-cup",
+            storageBucket: "torneo-crack-cup.appspot.com",
+            messagingSenderId: "1245957614",
+            appId: "1:1245957614:web:42ec92c7df010052a852ff",
+            measurementId: "G-QPL8KEKWKD"
+        };
+
+        // ✅ 3. Inicializa Firebase aquí, de forma global
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // ✅ 4. Función para actualizar los resultados
         function updateResults() {
-            const teams = JSON.parse(database.getItem('teams')) || [];
-            const sortedTeams = teams.sort((a, b) => (b.points || 0) - (a.points || 0));
-            const tbody = document.querySelector('#results-table tbody');
+            onValue(ref(database, 'teams'), (snapshot) => {
+                const teams = [];
+                snapshot.forEach((childSnapshot) => {
+                    const teamData = childSnapshot.val();
+                    const teamKey = childSnapshot.key;
+                    teams.push({ key: teamKey, ...teamData });
+                });
 
-            const previousOrder = [...tbody.children].map(row => row.dataset.teamName);
-            
-            tbody.innerHTML = '';
+                const sortedTeams = teams.sort((a, b) => (b.points || 0) - (a.points || 0));
+                const tbody = document.querySelector('#results-table tbody');
 
-            sortedTeams.forEach((team, index) => {
-                const row = document.createElement('tr');
-                row.dataset.teamName = team.name; // Guardar nombre del equipo en dataset
+                const previousOrder = [...tbody.children].map(row => row.dataset.teamName);
+                
+                tbody.innerHTML = '';
 
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td><img src="${team.logo}" alt="${team.name} Logo" class="team-logo"></td>
-                    <td>${team.name}</td>
-                    <td>${team.kills || 0}</td>
-                    <td>${team.points || 0}</td>
-                `;
+                sortedTeams.forEach((team, index) => {
+                    const row = document.createElement('tr');
+                    row.dataset.teamName = team.name; // Guardar nombre del equipo en dataset
 
-                // Si la posición cambió, añadir la animación
-                if (previousOrder.includes(team.name) && previousOrder.indexOf(team.name) !== index) {
-                    row.classList.add('changed');
-                    setTimeout(() => row.classList.remove('changed'), 1000); // Remover clase después de 1 seg
-                }
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td><img src="${team.logo}" alt="${team.name} Logo" class="team-logo"></td>
+                        <td>${team.name}</td>
+                        <td>${team.kills || 0}</td>
+                        <td>${team.points || 0}</td>
+                    `;
 
-                tbody.appendChild(row);
+                    // Si la posición cambió, añadir la animación
+                    if (previousOrder.includes(team.name) && previousOrder.indexOf(team.name) !== index) {
+                        row.classList.add('changed');
+                        setTimeout(() => row.classList.remove('changed'), 1000); // Remover clase después de 1 seg
+                    }
+
+                    tbody.appendChild(row);
+                });
             });
         }
 
-        // 🔥 Escuchar cambios en database desde cualquier pestaña
-        window.addEventListener('database', (event) => {
-            if (event.key === "teams") {
-                updateResults();
-            }
+        // ✅ 5. Cargar los resultados cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            updateResults();
         });
-
-        // ✅ Alternativa: Disparador manual para forzar actualización
-        function forceUpdate() {
-            database.setItem("updateTrigger", Date.now());
-        }
-
-        // 🔄 Escuchar el disparador para actualizar en cualquier pestaña
-        window.addEventListener('storage', (event) => {
-            if (event.key === "updateTrigger") {
-                updateResults();
-            }
-        });
-
-        // ⏳ Refresca cada 2 segundos como respaldo
-        setInterval(updateResults, 2000);
     </script>
-
 </body>
 </html>
