@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Torneo Free Fire</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Gestión de Torneo Free Fire</h1>
+    <div id="team-form">
+        <input type="text" id="team-name" placeholder="Nombre del equipo">
+        <input type="file" id="team-logo" accept="image/*">
+        <button onclick="addTeam()">Agregar Equipo</button>
+    </div>
+    <table id="teams-table">
+        <thead>
+            <tr>
+                <th>Logo</th>
+                <th>Equipo</th>
+                <th>Kills</th>
+                <th>Puntos</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Equipos se agregarán aquí -->
+        </tbody>
+    </table>
+    <div id="room-points">
+        <h2>Puntos por Sala</h2>
+        <div class="room-container">
+            <!-- Salas se generarán aquí -->
+        </div>
+    </div>
+    <button onclick="exportData()">Exportar Datos</button>
+    <h2>Resultados</h2>
+    <table id="results-table">
+        <thead>
+            <tr>
+                <th>Posición</th>
+                <th>Logo</th>
+                <th>Equipo</th>
+                <th>Puntos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Resultados se mostrarán aquí -->
+        </tbody>
+    </table>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
