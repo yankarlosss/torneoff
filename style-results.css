@@ -4,105 +4,93 @@
 }
 
 body {
-    background-color: #008000;
+    background-color: green;
     color: white;
     font-family: 'Impacted', sans-serif;
+    font-size: 32px;
     text-align: center;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 h1 {
-    color: gold;
-    font-size: 50px;
-    margin: 20px 0;
-    text-shadow: 3px 3px 10px rgba(255, 215, 0, 0.8);
-}
-
-/* 📌 Grid de 3 arriba - 3 abajo */
-#top6-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
-    justify-content: center;
-    align-items: center;
-}
-
-.team-card {
-    background: rgba(26, 26, 26, 0.85); /* 🔥 Negro con 85% de opacidad (15% menos) */
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    width: 280px;
-    border: 3px solid gold;
-    box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.8);
-    transition: transform 0.3s ease-in-out;
-}
-
-
-/* ✅ Efecto elegante al pasar el mouse */
-.team-card:hover {
-    transform: scale(1.03);
-    box-shadow: 0px 0px 20px rgba(255, 215, 0, 1);
-}
-
-.team-rank {
-    font-size: 28px;
+    color: yellow;
+    font-size: 45px;
+    margin-bottom: 10px;
     font-weight: bold;
-    color: gold;
-    text-shadow: none;
 }
 
-.team-rank-1::before {
-    content: "🏆 "; /* Copa de oro */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    height: 90vh;
 }
 
-.team-rank-2::before {
-    content: "🥈 "; /* Copa de plata */
+thead {
+    position: sticky;
+    top: 0;
+    background-color: green;
 }
 
-.team-rank-3::before {
-    content: "🥉 "; /* Copa de bronce */
+th, td {
+    padding: 15px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
 }
 
+th {
+    color: yellow;
+    font-size: 35px;
+}
 
+td:first-child {
+    font-size: 35px;
+}
 
+tbody tr:nth-child(1) td:first-child::before {
+    content: "🏆 ";
+}
 
-.team-logo {
-    width: 130px;
+tbody tr:nth-child(2) td:first-child::before {
+    content: "🥈 ";
+}
+
+tbody tr:nth-child(3) td:first-child::before {
+    content: "🥉 ";
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+td img {
+    width: 90px;
     height: auto;
     border-radius: 10px;
     border: 3px solid gold;
-    margin: 10px 0;
+    box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.9);
 }
 
-.team-info h2 {
-    font-size: 28px;
-    margin: 10px 0;
+tbody {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    height: 85vh;
 }
 
-.team-stats {
-    font-size: 22px;
-    margin-bottom: 10px;
+/* 🌀 Animación cuando un equipo cambia de posición */
+@keyframes changePosition {
+    0% { transform: translateX(-20px); opacity: 0.5; }
+    50% { transform: translateX(10px) scale(1.05); opacity: 1; }
+    100% { transform: translateX(0); }
 }
 
-.player-flags {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 5px;
-}
-
-.player {
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.flag {
-    width: 24px;
-    height: auto;
-    border-radius: 3px;
+.changed {
+    animation: changePosition 0.6s ease-in-out;
 }
