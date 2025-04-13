@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados Torneo Free Fire</title>
+    <link rel="stylesheet" href="style-results.css">
+</head>
+<body>
+
+
+    <table id="results-table">
+        <thead>
+            <tr>
+                <th>Posición</th>
+                <th>Logo</th>
+                <th>Equipo</th>
+                <th>Kills</th>
+                <th>Puntos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Resultados se cargarán aquí -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateResults();
+        });
+
+        function updateResults() {
+            const teams = JSON.parse(localStorage.getItem('teams')) || [];
+            const sortedTeams = teams.sort((a, b) => (b.points || 0) - (a.points || 0));
+            const tbody = document.querySelector('#results-table tbody');
+
+            const previousOrder = [...tbody.children].map(row => row.dataset.teamName);
+            
+            tbody.innerHTML = '';
+
+            sortedTeams.forEach((team, index) => {
+                const row = document.createElement('tr');
+                row.dataset.teamName = team.name; // Guardar nombre del equipo en dataset
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><img src="${team.logo}" alt="${team.name} Logo" class="team-logo"></td>
+                    <td>${team.name}</td>
+                    <td>${team.kills || 0}</td>
+                    <td>${team.points || 0}</td>
+                `;
+
+                // Si la posición cambió, añadir la animación
+                if (previousOrder.includes(team.name) && previousOrder.indexOf(team.name) !== index) {
+                    row.classList.add('changed');
+                    setTimeout(() => row.classList.remove('changed'), 1000); // Remover clase después de 1 seg
+                }
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // 🔥 Escuchar cambios en localStorage desde cualquier pestaña
+        window.addEventListener('storage', (event) => {
+            if (event.key === "teams") {
+                updateResults();
+            }
+        });
+
+        // ✅ Alternativa: Disparador manual para forzar actualización
+        function forceUpdate() {
+            localStorage.setItem("updateTrigger", Date.now());
+        }
+
+        // 🔄 Escuchar el disparador para actualizar en cualquier pestaña
+        window.addEventListener('storage', (event) => {
+            if (event.key === "updateTrigger") {
+                updateResults();
+            }
+        });
+
+        // ⏳ Refresca cada 2 segundos como respaldo
+        setInterval(updateResults, 2000);
+    </script>
+
+</body>
+</html>

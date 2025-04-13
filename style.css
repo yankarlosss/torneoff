@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: yellow;
+}
+
+#team-form {
+    margin-bottom: 20px;
+}
+
+#team-form input[type="text"] {
+    padding: 10px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+#team-form input[type="file"] {
+    padding: 10px;
+    margin-right: 10px;
+}
+
+#team-form button {
+    padding: 10px 20px;
+    background-color: yellow;
+    border: none;
+    cursor: pointer;
+}
+
+#team-form button:hover {
+    background-color: #ffcc00;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid white;
+}
+
+th {
+    background-color: yellow;
+    color: black;
+}
+
+td button {
+    padding: 5px 10px;
+    background-color: yellow;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+td button:hover {
+    background-color: #ffcc00;
+}
+
+#room-points {
+    margin-bottom: 20px;
+}
+
+.room-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.room {
+    background-color: yellow;
+    padding: 10px;
+    border-radius: 5px;
+    width: calc(12.5% - 10px);
+    box-sizing: border-box;
+}
+
+.room h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.room input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.room select {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+

@@ -1,0 +1,108 @@
+@font-face {
+    font-family: 'Impacted';
+    src: url('Impacted2.0.ttf') format('truetype');
+}
+
+body {
+    background-color: #008000;
+    color: white;
+    font-family: 'Impacted', sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: gold;
+    font-size: 50px;
+    margin: 20px 0;
+    text-shadow: 3px 3px 10px rgba(255, 215, 0, 0.8);
+}
+
+/* 📌 Grid de 3 arriba - 3 abajo */
+#top6-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.team-card {
+    background: rgba(26, 26, 26, 0.85); /* 🔥 Negro con 85% de opacidad (15% menos) */
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    width: 280px;
+    border: 3px solid gold;
+    box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.8);
+    transition: transform 0.3s ease-in-out;
+}
+
+
+/* ✅ Efecto elegante al pasar el mouse */
+.team-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 0px 20px rgba(255, 215, 0, 1);
+}
+
+.team-rank {
+    font-size: 28px;
+    font-weight: bold;
+    color: gold;
+    text-shadow: none;
+}
+
+.team-rank-1::before {
+    content: "🏆 "; /* Copa de oro */
+}
+
+.team-rank-2::before {
+    content: "🥈 "; /* Copa de plata */
+}
+
+.team-rank-3::before {
+    content: "🥉 "; /* Copa de bronce */
+}
+
+
+
+
+.team-logo {
+    width: 130px;
+    height: auto;
+    border-radius: 10px;
+    border: 3px solid gold;
+    margin: 10px 0;
+}
+
+.team-info h2 {
+    font-size: 28px;
+    margin: 10px 0;
+}
+
+.team-stats {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.player-flags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+.player {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.flag {
+    width: 24px;
+    height: auto;
+    border-radius: 3px;
+}

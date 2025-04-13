@@ -1,0 +1,96 @@
+@font-face {
+    font-family: 'Impacted';
+    src: url('Impacted2.0.ttf') format('truetype');
+}
+
+body {
+    background-color: green;
+    color: white;
+    font-family: 'Impacted', sans-serif;
+    font-size: 32px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+h1 {
+    color: yellow;
+    font-size: 45px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    height: 90vh;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: green;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+th {
+    color: yellow;
+    font-size: 35px;
+}
+
+td:first-child {
+    font-size: 35px;
+}
+
+tbody tr:nth-child(1) td:first-child::before {
+    content: "🏆 ";
+}
+
+tbody tr:nth-child(2) td:first-child::before {
+    content: "🥈 ";
+}
+
+tbody tr:nth-child(3) td:first-child::before {
+    content: "🥉 ";
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+td img {
+    width: 90px;
+    height: auto;
+    border-radius: 10px;
+    border: 3px solid gold;
+    box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.9);
+}
+
+tbody {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    height: 85vh;
+}
+
+/* 🌀 Animación cuando un equipo cambia de posición */
+@keyframes changePosition {
+    0% { transform: translateX(-20px); opacity: 0.5; }
+    50% { transform: translateX(10px) scale(1.05); opacity: 1; }
+    100% { transform: translateX(0); }
+}
+
+.changed {
+    animation: changePosition 0.6s ease-in-out;
+}
