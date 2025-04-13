@@ -30,7 +30,7 @@
         });
 
         function updateResults() {
-            const teams = JSON.parse(localStorage.getItem('teams')) || [];
+            const teams = JSON.parse(database.getItem('teams')) || [];
             const sortedTeams = teams.sort((a, b) => (b.points || 0) - (a.points || 0));
             const tbody = document.querySelector('#results-table tbody');
 
@@ -60,8 +60,8 @@
             });
         }
 
-        // 🔥 Escuchar cambios en localStorage desde cualquier pestaña
-        window.addEventListener('storage', (event) => {
+        // 🔥 Escuchar cambios en database desde cualquier pestaña
+        window.addEventListener('database', (event) => {
             if (event.key === "teams") {
                 updateResults();
             }
@@ -69,7 +69,7 @@
 
         // ✅ Alternativa: Disparador manual para forzar actualización
         function forceUpdate() {
-            localStorage.setItem("updateTrigger", Date.now());
+            database.setItem("updateTrigger", Date.now());
         }
 
         // 🔄 Escuchar el disparador para actualizar en cualquier pestaña
