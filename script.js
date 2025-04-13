@@ -7,10 +7,23 @@ let teams = [];
 const rooms = 8;
 
 // Importa las funciones necesarias desde Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-// Obtén una referencia a la base de datos
-const database = getDatabase();
+// Tu web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDoqAGJaDgotg4Ov2TNOEz-JuKuoLqzjWM",
+    authDomain: "torneo-crack-cup.firebaseapp.com",
+    projectId: "torneo-crack-cup",
+    storageBucket: "torneo-crack-cup.firebasestorage.app",
+    messagingSenderId: "1245957614",
+    appId: "1:1245957614:web:42ec92c7df010052a852ff",
+    measurementId: "G-QPL8KEKWKD"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 function addTeam() {
     const teamName = document.getElementById('team-name').value.trim();
@@ -239,5 +252,21 @@ function updateResults() {
             <td>${team.points}</td>
         `;
         resultsTable.appendChild(row);
+    });
+}
+
+// Función para exportar datos (ejemplo básico)
+function exportData() {
+    onValue(ref(database, 'teams'), (snapshot) => {
+        const data = snapshot.val();
+        const jsonString = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'teams.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
     });
 }
