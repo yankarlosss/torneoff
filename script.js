@@ -1,30 +1,27 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa Firebase
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-
-    // Carga los equipos y genera las salas después de inicializar Firebase
-    loadTeams();
-    generateRooms();
-});
-
-let teams = [];
-const rooms = 8;
-
-// Importa las funciones necesarias desde Firebase
+// ✅ 1. Primero importa lo necesario de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-// Tu web app's Firebase configuration
+// ✅ 2. Configuración de Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDoqAGJaDgotg4Ov2TNOEz-JuKuoLqzjWM",
     authDomain: "torneo-crack-cup.firebaseapp.com",
     projectId: "torneo-crack-cup",
-    storageBucket: "torneo-crack-cup.firebasestorage.app",
+    storageBucket: "torneo-crack-cup.appspot.com",
     messagingSenderId: "1245957614",
     appId: "1:1245957614:web:42ec92c7df010052a852ff",
     measurementId: "G-QPL8KEKWKD"
 };
+
+// ✅ 3. Inicializa Firebase aquí, de forma global
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+// ✅ 4. Declarar variables globales
+let teams = [];
+const rooms = 8;
+
+// ✅ 5. Funciones de la aplicación
 
 function addTeam() {
     const teamName = document.getElementById('team-name').value.trim();
@@ -271,3 +268,19 @@ function exportData() {
         a.remove();
     });
 }
+
+// ✅ 6. Exponer las funciones al objeto window
+window.addTeam = addTeam;
+window.editTeam = editTeam;
+window.deleteTeam = deleteTeam;
+window.updateKills = updateKills;
+window.updatePoints = updatePoints;
+window.fillRoomData = fillRoomData;
+window.updateRoomPoints = updateRoomPoints;
+window.exportData = exportData;
+
+// ✅ 7. Cargar los equipos y generar las salas cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    loadTeams();
+    generateRooms();
+});
