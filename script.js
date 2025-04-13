@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicializa Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Carga los equipos y genera las salas después de inicializar Firebase
     loadTeams();
     generateRooms();
 });
@@ -20,10 +25,6 @@ const firebaseConfig = {
     appId: "1:1245957614:web:42ec92c7df010052a852ff",
     measurementId: "G-QPL8KEKWKD"
 };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
 
 function addTeam() {
     const teamName = document.getElementById('team-name').value.trim();
